@@ -2,7 +2,7 @@
 ## Stage 1: Download / extract plex source ##
 #############################################
 
-FROM balenalib/armv7hf-debian:stretch AS src
+FROM arm64v8/debian:buster AS src
 
 ENV DEBIAN_FRONTEND="noninteractive" \
   PLEX_PATH=/opt/plex/Application
@@ -14,7 +14,7 @@ RUN apt update \
 
 # Download / extract Plex
 RUN PLEX_VERSION=$(cat ./VERSION) \
-  && wget --no-verbose -O /tmp/plex.tar https://downloads.plex.tv/plex-media-server-new/${PLEX_VERSION}/synology/PlexMediaServer-${PLEX_VERSION}-armv7hf.spk \
+  && wget --no-verbose -O /tmp/plex.tar https://downloads.plex.tv/plex-media-server-new/${PLEX_VERSION}/synology/PlexMediaServer-${PLEX_VERSION}-aarch64.spk \
   && tar -xf /tmp/plex.tar -C /tmp \
   && mkdir -p $PLEX_PATH \
   && tar -xf /tmp/package.tgz -C $PLEX_PATH
@@ -35,7 +35,7 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
 ## Stage 2: Final image ##
 ##########################
 
-FROM arm32v7/debian:stretch-slim
+FROM arm64v8/debian:buster-slim
 
 ENV PLEX_PATH=/opt/plex/Application
 
